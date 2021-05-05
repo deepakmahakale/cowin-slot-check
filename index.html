@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covin Alert</title>
+  </head>
+  <body>
+    <form id="covin_details" autocomplete="on" onsubmit="watchForAvailibility()" action="javascript:void(0);">
+      <label for="pincode">Pin code:</label><br>
+      <input type="text" id="pincode" name="pincode" required autocomplete="shipping postal-code"><br><br>
+      <input type="submit" value="Submit">
+    </form>
+    <script type= 'text/javascript'>
+      function watchForAvailibility() {
+        var limit = 2
+        var pincode = document.getElementById("pincode").value;
+        var frequency = 1000 * 60 * 30 // 30 minutes
+        date = new Date()
+        var today = date.toLocaleDateString();
+        var tomorrow = new Date()
+        tomorrow.setDate(date.getDate() + 1)
+        tomorrow = tomorrow.toLocaleDateString()
+        var dayAfterTomorrow = new Date()
+        dayAfterTomorrow.setDate(date.getDate() + 2)
+        dayAfterTomorrow = dayAfterTomorrow.toLocaleDateString()
+
+        console.log(pincode)
+        alert('Please keep this tab open. The script will keep checking for the slots and alert you')
+
+        for (let i = 0; i < limit; i++) {
+          setTimeout(function(){
+            apiCall(pincode, today)
+            apiCall(pincode, tomorrow)
+            apiCall(pincode, dayAfterTomorrow)
+          }, frequency);
+        }
+      }
+
+      function apiCall(pincode, date) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`, false );
+        xmlHttp.send( null );
+        var response = JSON.parse(xmlHttp.responseText)
+        console.log(pincode, date, response)
+        if(response.sessions.length) {
+          var msg = new SpeechSynthesisUtterance('Vaccination slot available');
+          window.speechSynthesis.speak(msg);
+        }
+      }
+    </script>
+  </body>
+</html>
