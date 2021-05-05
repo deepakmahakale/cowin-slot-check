@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Covin Alert</title>
+    <title>Cowin Alert</title>
     <style>
       body {
         text-align: center;
@@ -15,6 +15,13 @@
     </style>
   </head>
   <body>
+    <h1>Check availability for vaccination</h1>
+    <p>
+      Enter the pin code and keep the browser open the script will keep checking
+      for the availability.
+      <br>
+      Once the slot is available you will hear an audio with message "Vaccination slot available".
+    </p>
     <form id="covin_details" autocomplete="on" onsubmit="watchForAvailibility()" action="javascript:void(0);">
       <label for="pincode">Pin code:</label><br>
       <input type="text" id="pincode" name="pincode" required autocomplete="shipping postal-code">
